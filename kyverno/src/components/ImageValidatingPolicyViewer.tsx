@@ -30,6 +30,7 @@ import {
   ImageAttestation,
   ImageMatchReference,
   ImageValidatingPolicy,
+  ValidatingPolicy,
 } from '../resources/celPolicies';
 
 interface ImageValidatingPolicyViewerProps {
@@ -48,7 +49,7 @@ function attestorType(attestor: Attestor): string {
 function PolicyContent({ policy }: { policy: ImageValidatingPolicy }) {
   const { t } = useTranslation();
   const annotations = policy.jsonData.metadata.annotations || {};
-
+  console.log('PolicyContent policy:', policy);
   return (
     <Box sx={{ p: 2 }}>
       <Box sx={{ display: 'flex', gap: 1, mb: 2, justifyContent: 'flex-end' }}>
@@ -99,6 +100,10 @@ function PolicyContent({ policy }: { policy: ImageValidatingPolicy }) {
             ...(annotations['policies.kyverno.io/severity']
               ? [{ name: t('Severity'), value: annotations['policies.kyverno.io/severity'] }]
               : []),
+            {
+              name: t('Validation Actions'),
+              value: (policy.spec as ValidatingPolicy).validationActions?.join(', ') || '-',
+            },
           ]}
         />
       </SectionBox>

@@ -18,8 +18,9 @@ import { Icon } from '@iconify/react';
 import { Activity, useTranslation } from '@kinvolk/headlamp-plugin/lib';
 import { ResourceListView } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
 import { Chip, Link as MuiLink } from '@mui/material';
-import { ImageValidatingPolicy } from '../resources/celPolicies';
+import { ImageValidatingPolicy, ValidatingPolicy } from '../resources/celPolicies';
 import { ImageValidatingPolicyViewer } from './ImageValidatingPolicyViewer';
+import { PolicyTemplatesMenu } from './PolicyTemplatesMenu';
 
 function openActivity(item: ImageValidatingPolicy) {
   Activity.launch({
@@ -37,6 +38,22 @@ export function ImageValidatingPolicyList() {
     <ResourceListView
       title={t('Image Validating Policies')}
       resourceClass={ImageValidatingPolicy}
+      headerProps={{
+                          titleSideActions: [
+                            <PolicyTemplatesMenu
+                              policyKind="ImageValidatingPolicy"
+                              defaultTemplates={[
+                                {
+                                  id: 'sample-image-validating-policy',
+                                  path: '',
+                                  name: 'ImageValidatingPolicy Sample Template',
+                                  title: 'ImageValidatingPolicy Sample Template',
+                                  policy: ImageValidatingPolicy.getBaseObject(),
+                                },
+                              ]}
+                            />,
+                          ],
+                        }}
       columns={[
         {
           id: 'name',
@@ -64,6 +81,11 @@ export function ImageValidatingPolicyList() {
             />
           ),
           gridTemplate: '0.5fr',
+        },
+        {
+          id: 'action',
+          label: t('Actions'),
+          getValue: item => (item.jsonData.spec as ValidatingPolicy).validationActions?.join(', ') || '-',
         },
         {
           id: 'images',

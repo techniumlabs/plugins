@@ -25,6 +25,7 @@ import {
   ValidatingPolicy,
 } from '../resources/celPolicies';
 import { CELPolicyViewer } from './CELPolicyViewer';
+import { PolicyTemplatesMenu } from './PolicyTemplatesMenu';
 
 type CELPolicy = ValidatingPolicy | MutatingPolicy | GeneratingPolicy | DeletingPolicy;
 
@@ -48,6 +49,22 @@ export function ValidatingPolicyList() {
     <ResourceListView
       title={t('Validating Policies')}
       resourceClass={ValidatingPolicy}
+      headerProps={{
+                    titleSideActions: [
+                      <PolicyTemplatesMenu
+                        policyKind="ValidatingPolicy"
+                        defaultTemplates={[
+                          {
+                            id: 'sample-validating-policy',
+                            path: '',
+                            name: 'ValidatingPolicy Sample Template',
+                            title: 'ValidatingPolicy Sample Template',
+                            policy: ValidatingPolicy.getBaseObject(),
+                          },
+                        ]}
+                      />,
+                    ],
+                  }}
       columns={[
         {
           id: 'name',
@@ -93,6 +110,22 @@ export function MutatingPolicyList() {
     <ResourceListView
       title={t('Mutating Policies')}
       resourceClass={MutatingPolicy}
+      headerProps={{
+                    titleSideActions: [
+                      <PolicyTemplatesMenu
+                        policyKind="MutatingPolicy"
+                        defaultTemplates={[
+                          {
+                            id: 'sample-mutating-policy',
+                            path: '',
+                            name: 'MutatingPolicy Sample Template',
+                            title: 'MutatingPolicy Sample Template',
+                            policy: MutatingPolicy.getBaseObject(),
+                          },
+                        ]}
+                      />,
+                    ],
+                  }}
       columns={[
         {
           id: 'name',
@@ -133,6 +166,22 @@ export function GeneratingPolicyList() {
     <ResourceListView
       title={t('Generating Policies')}
       resourceClass={GeneratingPolicy}
+      headerProps={{
+                    titleSideActions: [
+                      <PolicyTemplatesMenu
+                        policyKind="GeneratingPolicy"
+                        defaultTemplates={[
+                          {
+                            id: 'sample-generating-policy',
+                            path: '',
+                            name: 'GeneratingPolicy Sample Template',
+                            title: 'GeneratingPolicy Sample Template',
+                            policy: GeneratingPolicy.getBaseObject(),
+                          },
+                        ]}
+                      />,
+                    ],
+                  }}
       columns={[
         {
           id: 'name',
@@ -173,6 +222,22 @@ export function DeletingPolicyList() {
     <ResourceListView
       title={t('Deleting Policies')}
       resourceClass={DeletingPolicy}
+      headerProps={{
+                    titleSideActions: [
+                      <PolicyTemplatesMenu
+                        policyKind="DeletingPolicy"
+                        defaultTemplates={[
+                          {
+                            id: 'sample-deleting-policy',
+                            path: '',
+                            name: 'DeletingPolicy Sample Template',
+                            title: 'DeletingPolicy Sample Template',
+                            policy: DeletingPolicy.getBaseObject(),
+                          },
+                        ]}
+                      />,
+                    ],
+                  }}
       columns={[
         {
           id: 'name',
