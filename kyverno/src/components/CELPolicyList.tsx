@@ -25,9 +25,19 @@ import {
   ValidatingPolicy,
 } from '../resources/celPolicies';
 import { CELPolicyViewer } from './CELPolicyViewer';
+import { GenerateOneTimeButton } from './GenerateOneTimeButton';
 import { PolicyTemplatesMenu } from './PolicyTemplatesMenu';
+import { VisualEditButton } from './VisualEditButton';
 
 type CELPolicy = ValidatingPolicy | MutatingPolicy | GeneratingPolicy | DeletingPolicy;
+
+// Row action: open the visual builder pre-filled with this policy to edit and save.
+const visualEditAction = {
+  id: 'visual-edit',
+  action: ({ item, closeMenu }: { item: any; closeMenu: () => void }) => (
+    <VisualEditButton item={item} afterConfirm={closeMenu} buttonStyle="menu" key="visual-edit" />
+  ),
+};
 
 function openCELPolicyActivity(item: CELPolicy) {
   Activity.launch({
@@ -50,21 +60,22 @@ export function ValidatingPolicyList() {
       title={t('Validating Policies')}
       resourceClass={ValidatingPolicy}
       headerProps={{
-                    titleSideActions: [
-                      <PolicyTemplatesMenu
-                        policyKind="ValidatingPolicy"
-                        defaultTemplates={[
-                          {
-                            id: 'sample-validating-policy',
-                            path: '',
-                            name: 'ValidatingPolicy Sample Template',
-                            title: 'ValidatingPolicy Sample Template',
-                            policy: ValidatingPolicy.getBaseObject(),
-                          },
-                        ]}
-                      />,
-                    ],
-                  }}
+        titleSideActions: [
+          <PolicyTemplatesMenu
+            policyKind="ValidatingPolicy"
+            defaultTemplates={[
+              {
+                id: 'sample-validating-policy',
+                path: '',
+                name: 'ValidatingPolicy Sample Template',
+                title: 'ValidatingPolicy Sample Template',
+                policy: ValidatingPolicy.getBaseObject(),
+              },
+            ]}
+          />,
+        ],
+      }}
+      actions={[visualEditAction]}
       columns={[
         {
           id: 'name',
@@ -111,21 +122,22 @@ export function MutatingPolicyList() {
       title={t('Mutating Policies')}
       resourceClass={MutatingPolicy}
       headerProps={{
-                    titleSideActions: [
-                      <PolicyTemplatesMenu
-                        policyKind="MutatingPolicy"
-                        defaultTemplates={[
-                          {
-                            id: 'sample-mutating-policy',
-                            path: '',
-                            name: 'MutatingPolicy Sample Template',
-                            title: 'MutatingPolicy Sample Template',
-                            policy: MutatingPolicy.getBaseObject(),
-                          },
-                        ]}
-                      />,
-                    ],
-                  }}
+        titleSideActions: [
+          <PolicyTemplatesMenu
+            policyKind="MutatingPolicy"
+            defaultTemplates={[
+              {
+                id: 'sample-mutating-policy',
+                path: '',
+                name: 'MutatingPolicy Sample Template',
+                title: 'MutatingPolicy Sample Template',
+                policy: MutatingPolicy.getBaseObject(),
+              },
+            ]}
+          />,
+        ],
+      }}
+      actions={[visualEditAction]}
       columns={[
         {
           id: 'name',
@@ -167,21 +179,35 @@ export function GeneratingPolicyList() {
       title={t('Generating Policies')}
       resourceClass={GeneratingPolicy}
       headerProps={{
-                    titleSideActions: [
-                      <PolicyTemplatesMenu
-                        policyKind="GeneratingPolicy"
-                        defaultTemplates={[
-                          {
-                            id: 'sample-generating-policy',
-                            path: '',
-                            name: 'GeneratingPolicy Sample Template',
-                            title: 'GeneratingPolicy Sample Template',
-                            policy: GeneratingPolicy.getBaseObject(),
-                          },
-                        ]}
-                      />,
-                    ],
-                  }}
+        titleSideActions: [
+          <PolicyTemplatesMenu
+            policyKind="GeneratingPolicy"
+            defaultTemplates={[
+              {
+                id: 'sample-generating-policy',
+                path: '',
+                name: 'GeneratingPolicy Sample Template',
+                title: 'GeneratingPolicy Sample Template',
+                policy: GeneratingPolicy.getBaseObject(),
+              },
+            ]}
+          />,
+        ],
+      }}
+      actions={[
+        
+        {
+          id: 'Generate',
+          action: ({ item, closeMenu }) => (
+            <GenerateOneTimeButton
+              item={item}
+              afterConfirm={closeMenu}
+              buttonStyle="menu"
+              key="generate"
+            />
+          ),
+        },visualEditAction
+      ]}
       columns={[
         {
           id: 'name',
@@ -223,21 +249,22 @@ export function DeletingPolicyList() {
       title={t('Deleting Policies')}
       resourceClass={DeletingPolicy}
       headerProps={{
-                    titleSideActions: [
-                      <PolicyTemplatesMenu
-                        policyKind="DeletingPolicy"
-                        defaultTemplates={[
-                          {
-                            id: 'sample-deleting-policy',
-                            path: '',
-                            name: 'DeletingPolicy Sample Template',
-                            title: 'DeletingPolicy Sample Template',
-                            policy: DeletingPolicy.getBaseObject(),
-                          },
-                        ]}
-                      />,
-                    ],
-                  }}
+        titleSideActions: [
+          <PolicyTemplatesMenu
+            policyKind="DeletingPolicy"
+            defaultTemplates={[
+              {
+                id: 'sample-deleting-policy',
+                path: '',
+                name: 'DeletingPolicy Sample Template',
+                title: 'DeletingPolicy Sample Template',
+                policy: DeletingPolicy.getBaseObject(),
+              },
+            ]}
+          />,
+        ],
+      }}
+      actions={[visualEditAction]}
       columns={[
         {
           id: 'name',
