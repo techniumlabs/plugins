@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react';
 import { Box, Button, Chip,Divider, FormControl, FormControlLabel, IconButton, InputLabel, MenuItem, Paper, Select, Stack, Switch, TextField, Typography } from '@mui/material';
 import React from 'react';
-import { Attestor, DeletingConditionItem, DeletingFormData, GeneratingFormData, ImageRef, ImageValidatingFormData, makeCelGroup,makeId, MutatingFormData, MutationPatch, PolicyVariable, ValidatingFormData } from '../types';
+import { Attestor, DeletingConditionItem, DeletingFormData, GeneratingFormData, ImageRef, ImageValidatingFormData, makeCelGroup,makeId, MutatingFormData, MutationPatch, ValidatingFormData } from '../types';
 import { CelExpressionBuilder,CelExpressionList } from './shared/CelExpressionBuilder';
 import { MatchConditionsEditor, VariablesEditor } from './shared/PolicyConditionEditors';
 
@@ -101,12 +101,6 @@ interface GeneratingBodyProps {
   onChange: (d: GeneratingFormData) => void;
 }
 export function GeneratingBody({ data, onChange }: GeneratingBodyProps) {
-  const updateVar = (idx: number, v: PolicyVariable) => {
-    const next = [...data.variables]; next[idx] = v; onChange({ ...data, variables: next });
-  };
-  const removeVar = (idx: number) => onChange({ ...data, variables: data.variables.filter((_, i) => i !== idx) });
-  const addVar = () => onChange({ ...data, variables: [...data.variables, { id: makeId(), name: '', expression: '' }] });
-
   return (
     <Box>
       <FormControlLabel sx={{ mb: 2 }}
@@ -114,34 +108,14 @@ export function GeneratingBody({ data, onChange }: GeneratingBodyProps) {
         label="Synchronize (keep generated resources in sync)"
       />
       <Divider sx={{ mb: 2 }} />
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Variables</Typography>
-        <Button size="small" startIcon={<Icon icon="mdi:plus" />} onClick={addVar} sx={{ textTransform: 'none' }}>Add variable</Button>
-      </Stack>
-      {data.variables.map((v, i) => (
-        <Paper key={v.id} variant="outlined" sx={{ p: 2, mb: 1.5, borderRadius: 2 }}>
-          <Stack direction="row" spacing={1.5} alignItems="flex-start">
-            <TextField size="small" label="Variable name" value={v.name} sx={{ flex: 1 }}
-              onChange={e => updateVar(i, { ...v, name: e.target.value })} placeholder="targetNs" />
-            <TextField size="small" label="CEL expression" value={v.expression} sx={{ flex: 2 }}
-              onChange={e => updateVar(i, { ...v, expression: e.target.value })}
-              placeholder='object.metadata.name'
-              inputProps={{ style: { fontFamily: 'monospace' } }} />
-            {data.variables.length > 1 && (
-              <IconButton size="small" onClick={() => removeVar(i)} color="error" sx={{ mt: 0.5 }}>
-                <Icon icon="mdi:delete" style={{ fontSize: '1.1rem' }} />
-              </IconButton>
-            )}
-          </Stack>
-        </Paper>
-      ))}
+      <VariablesEditor variables={data.variables ?? []} onChange={v => onChange({ ...data, variables: v })} />
       <Divider sx={{ my: 2 }} />
       <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.5 }}>Generate Expression</Typography>
-      <TextField fullWidth multiline minRows={3} size="small" label="generator.Apply(...) expression"
+      <TextField fullWidth multiline minRows={3} maxRows={16} size="small" label="generator.Apply(...) expression"
         value={data.generateExpression}
         onChange={e => onChange({ ...data, generateExpression: e.target.value })}
         placeholder="generator.Apply(variables.targetNs, variables.downstream)"
-        inputProps={{ style: { fontFamily: 'monospace', fontSize: '0.82rem' } }}
+        inputProps={{ style: { fontFamily: 'monospace', fontSize: '0.85rem', lineHeight: 1.5 } }}
         helperText="Use generator.Apply(namespace, downstream) to create resources in the target namespace"
       />
     </Box>
