@@ -21,6 +21,8 @@ import { Box, Chip, Link as MuiLink, Typography } from '@mui/material';
 import { usePolicyResultCounts } from '../hooks/usePolicyResultCounts';
 import { KyvernoClusterPolicy } from '../resources/kyvernoPolicy';
 import { PolicyViewer } from './PolicyViewer';
+import { PolicyTemplatesMenu } from './PolicyTemplatesMenu';
+import { VisualEditButton } from './VisualEditButton';
 
 function openClusterPolicyActivity(item: KyvernoClusterPolicy) {
   Activity.launch({
@@ -31,7 +33,12 @@ function openClusterPolicyActivity(item: KyvernoClusterPolicy) {
     content: <PolicyViewer name={item.jsonData.metadata.name} isClusterScoped />,
   });
 }
-
+const visualEditAction = {
+  id: 'visual-edit',
+  action: ({ item, closeMenu }: { item: any; closeMenu: () => void }) => (
+    <VisualEditButton item={item} afterConfirm={closeMenu} buttonStyle="menu" key="visual-edit" />
+  ),
+};
 export function ClusterPolicyList() {
   const { t } = useTranslation();
   const counts = usePolicyResultCounts();
@@ -39,6 +46,23 @@ export function ClusterPolicyList() {
     <ResourceListView
       title={t('Cluster Policies')}
       resourceClass={KyvernoClusterPolicy}
+      headerProps={{
+              titleSideActions: [
+                <PolicyTemplatesMenu
+                  policyKind="ClusterPolicy"
+                  defaultTemplates={[
+                    {
+                      id: 'sample-cluster-policy',
+                      path: '',
+                      name: 'ClusterPolicy Sample Template',
+                      title: 'ClusterPolicy Sample Template',
+                      policy: KyvernoClusterPolicy.getBaseObject(),
+                    },
+                  ]}
+                />,
+              ],
+            }}
+      actions={[visualEditAction]}
       columns={[
         {
           id: 'name',
