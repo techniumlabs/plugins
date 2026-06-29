@@ -1,6 +1,6 @@
 {
   "name": "@headlamp-k8s/kyverno",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A UI for viewing Kyverno policies and reports in Headlamp.",
   "scripts": {
     "start": "headlamp-plugin start",
