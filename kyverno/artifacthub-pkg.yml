@@ -1,7 +1,7 @@
-version: 0.1.0
+version: 0.1.1
 name: headlamp_kyverno
 displayName: Kyverno
-createdAt: "2026-06-19T15:26:22.137Z"
+createdAt: "2026-06-30T04:08:24.234Z"
 logoURL: "https://raw.githubusercontent.com/headlamp-k8s/plugins/main/kyverno/logo.svg"
 description: A UI for viewing Kyverno policies and policy reports in Headlamp.
 changes:
