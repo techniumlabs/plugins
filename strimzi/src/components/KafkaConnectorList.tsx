@@ -15,7 +15,7 @@ import {
   type ColumnType,
   type ResourceTableColumn,
 } from '@kinvolk/headlamp-plugin/lib/components/common';
-import { KafkaConnector, KafkaConnectorV1 } from '../resources/kafkaConnector';
+import { KafkaConnector } from '../resources/kafkaConnector';
 import type { KafkaConnectorInterface, KafkaConnectorState } from '../resources/kafkaConnector';
 import { getErrorMessage } from '../utils/errors';
 import { useStrimziApiVersions } from '../hooks/useStrimziApiVersions';
@@ -41,7 +41,6 @@ const STATE_CHIP_COLORS: Record<KafkaConnectorState, 'success' | 'warning' | 'de
 export function KafkaConnectorList() {
   const theme = useTheme();
   const { ready, installed, kafka: kafkaVersion } = useStrimziApiVersions();
-  const KafkaConnectorClass = kafkaVersion === 'v1' ? KafkaConnectorV1 : KafkaConnector;
 
   if (ready && !installed) return <StrimziNotInstalledMessage />;
 
@@ -140,7 +139,9 @@ export function KafkaConnectorList() {
     {
       id: 'actions',
       label: 'Actions',
-      getValue: () => '',
+      // The rendered button depends on the desired state, so the cell value has
+      // to change with it for the table to pick the new state up.
+      getValue: (item: KafkaConnector) => item.desiredState,
       render: (item: KafkaConnector) => {
         const desired = item.desiredState;
         if (desired === 'paused') {
@@ -190,7 +191,7 @@ export function KafkaConnectorList() {
 
   return (
     <>
-      <ResourceListView title="Kafka Connectors" resourceClass={KafkaConnectorClass} columns={columns} />
+      <ResourceListView title="Kafka Connectors" resourceClass={KafkaConnector} columns={columns} />
       <Dialog
         open={pendingState !== null}
         onClose={() => setPendingState(null)}
